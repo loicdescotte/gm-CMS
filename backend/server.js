@@ -87,7 +87,7 @@ app.get('/posts', (req, res) => {
 });
 
 //read one post
-//example : http://localhost:3000/post/2014-06-08-first.md
+//example : http://localhost:4000/post/2017-01-01-first-post.md
 app.get('/post/:id', (req, res) => {
     openRepo()
     .then(repo => {
