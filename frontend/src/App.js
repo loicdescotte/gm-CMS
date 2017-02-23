@@ -88,7 +88,7 @@ class List extends React.Component {
       })
       .map(post => (
         <li>
-          <Link to={"/post/"+post.fileName} onClick={(e) => this.loadPost(post.fileName)}>{post.label}</Link>
+          <Link to={post.fileName} onClick={(e) => this.loadPost(post.fileName)}>{post.label}</Link>
         </li>)
       );
       const search = this.state.search;
@@ -118,6 +118,7 @@ class List extends React.Component {
 
 class App extends Component {
   render() {
+    console.log("app", this.props.params);
     return (
       <div>
         <Navbar inverse fixedTop>
