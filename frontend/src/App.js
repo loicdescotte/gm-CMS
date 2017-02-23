@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Navbar, Jumbotron } from 'react-bootstrap';
+import { Link } from 'react-router';
 import RawHtml from "react-raw-html";
 import './App.css';
 
@@ -29,6 +30,10 @@ class List extends React.Component {
   }
 
   componentDidMount() {
+    if(this.props.params && this.props.params.id){
+      this.loadPost(this.props.params.id);
+    }
+
     fetch("http://localhost:4000/posts")
       .then(result=> {
         result.json().then( jsonResult => {
@@ -59,7 +64,7 @@ class List extends React.Component {
     this.setState({search: e.target.value});
   }
 
-  handleLinkClick(fileName){
+  loadPost(fileName){
     fetch("http://localhost:4000/post/"+fileName).then(result => {
       result.text().then(body => {
         this.setState({
@@ -87,7 +92,7 @@ class List extends React.Component {
       })
       .map(post => (
         <li>
-          <a onClick={(e) => this.handleLinkClick(post.fileName)}>{post.label}</a>
+          <Link to={"/post/"+post.fileName} onClick={(e) => this.loadPost(post.fileName)}>{post.label}</Link>
         </li>)
       );
       const search = this.state.search;
@@ -100,7 +105,7 @@ class List extends React.Component {
             <ul>{listItems}</ul>
           </div>
       );
-      else postLists = <a onClick={(e) => this.handleBackClick()}>Back to post lists</a>;
+      else postLists = <Link to="/" onClick={(e) => this.handleBackClick()}>Back to post lists</Link>;
       let currentPost;
       if(this.state.displayList) currentPost = <div/>;
       else {
