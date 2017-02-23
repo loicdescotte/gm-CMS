@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Navbar, Jumbotron } from 'react-bootstrap';
+import { Link } from 'react-router';
 import RawHtml from "react-raw-html";
 import './App.css';
 
@@ -8,7 +9,7 @@ class Post extends React.Component {
   render() {
     return (
       <RawHtml.div>
-        {this.props.currentPost}
+        {this.props.content}
       </RawHtml.div>
     );
   }
@@ -29,7 +30,8 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:4000/posts")
+    if(this.props.urlPost) this.loadPost(this.props.urlPost);
+    else fetch("http://localhost:4000/posts")
       .then(result=> {
         result.json().then( jsonResult => {
           const posts = jsonResult.posts.map(fileName => {
@@ -59,7 +61,7 @@ class List extends React.Component {
     this.setState({search: e.target.value});
   }
 
-  handleLinkClick(fileName){
+  loadPost(fileName){
     fetch("http://localhost:4000/post/"+fileName).then(result => {
       result.text().then(body => {
         this.setState({
@@ -87,7 +89,7 @@ class List extends React.Component {
       })
       .map(post => (
         <li>
-          <a onClick={(e) => this.handleLinkClick(post.fileName)}>{post.label}</a>
+          <Link to={"post/"+post.fileName} onClick={(e) => this.loadPost(post.fileName)}>{post.label}</Link>
         </li>)
       );
       const search = this.state.search;
@@ -100,11 +102,11 @@ class List extends React.Component {
             <ul>{listItems}</ul>
           </div>
       );
-      else postLists = <a onClick={(e) => this.handleBackClick()}>Back to post lists</a>;
+      else postLists = <Link to="/" onClick={(e) => this.handleBackClick()}>Back to post lists</Link>;
       let currentPost;
       if(this.state.displayList) currentPost = <div/>;
       else {
-        currentPost = <Post currentPost={this.state.currentPost}/>
+        currentPost = <Post content={this.state.currentPost}/>
       }
       return (
       <div>
@@ -117,6 +119,8 @@ class List extends React.Component {
 
 class App extends Component {
   render() {
+    let urlPost;
+    if(this.props.params) urlPost = this.props.params.id;
     return (
       <div>
         <Navbar inverse fixedTop>
@@ -134,7 +138,7 @@ class App extends Component {
             <h1>GM-CMS</h1>
             <br/>
             <div>
-              <List/>
+              <List urlPost={urlPost}/>
             </div>
             <p>
             </p>
