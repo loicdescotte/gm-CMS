@@ -16,7 +16,7 @@ class Post extends React.Component {
 }
 
 
-class List extends React.Component {
+class Posts extends React.Component {
   constructor(props) {
     super(props);
     const posts = [];
@@ -62,12 +62,10 @@ class List extends React.Component {
   }
 
   loadPost(fileName){
+    this.setState({displayList: false});
     fetch("http://localhost:4000/post/"+fileName).then(result => {
       result.text().then(body => {
-        this.setState({
-          currentPost: body,
-          displayList: false
-        });
+        this.setState({currentPost: body});
       });
     });
   }
@@ -87,8 +85,8 @@ class List extends React.Component {
       .filter(post => {
         return post.label.toLowerCase().includes(this.state.search.toLowerCase());
       })
-      .map(post => (
-        <li>
+      .map((post, index) => (
+        <li key={index}>
           <Link to={"post/"+post.fileName} onClick={(e) => this.loadPost(post.fileName)}>{post.label}</Link>
         </li>)
       );
@@ -138,7 +136,7 @@ class App extends Component {
             <h1>GM-CMS</h1>
             <br/>
             <div>
-              <List urlPost={urlPost}/>
+              <Posts urlPost={urlPost}/>
             </div>
             <p>
             </p>
