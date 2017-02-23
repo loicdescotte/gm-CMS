@@ -31,7 +31,11 @@ class Posts extends React.Component {
 
   componentDidMount() {
     if(this.props.urlPost) this.loadPost(this.props.urlPost);
-    else fetch("http://localhost:4000/posts")
+    else this.fetchPostList();
+  }
+
+  fetchPostList() {
+    fetch("http://localhost:4000/posts")
       .then(result=> {
         result.json().then( jsonResult => {
           const posts = jsonResult.posts.map(fileName => {
@@ -71,6 +75,7 @@ class Posts extends React.Component {
   }
 
   handleBackClick(fileName){
+    if(this.state.posts.length ===0) this.fetchPostList();
     this.setState({displayList: true});
   }
 
