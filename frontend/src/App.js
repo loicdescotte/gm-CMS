@@ -30,10 +30,6 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.params && this.props.params.id){
-      this.loadPost(this.props.params.id);
-    }
-
     fetch("http://localhost:4000/posts")
       .then(result=> {
         result.json().then( jsonResult => {
