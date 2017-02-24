@@ -20,4 +20,4 @@ ReactDOM.render((
       </Grid>
     </Jumbotron>
   </div>
-), document.getElementById('root'))
+), document.getElementById('root'));
