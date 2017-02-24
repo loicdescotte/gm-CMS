@@ -5,6 +5,17 @@ import RawHtml from "react-raw-html";
 import './App.css';
 
 
+class Search extends React.Component {
+  render() {
+    return (
+      <div>
+        <span>Search : </span>
+        <input type="text" onChange={this.props.callBack}/>
+      </div>
+    );
+  }
+}
+
 class Post extends React.Component {
   render() {
     return (
@@ -14,7 +25,6 @@ class Post extends React.Component {
     );
   }
 }
-
 
 class Posts extends React.Component {
   constructor(props) {
@@ -95,12 +105,10 @@ class Posts extends React.Component {
           <Link to={"post/"+post.fileName} onClick={(e) => this.loadPost(post.fileName)}>{post.label}</Link>
         </li>)
       );
-      const search = this.state.search;
       let postLists;
       if(this.state.displayList) postLists = (
           <div>
-            <span>Search : </span>
-            <input type="text" value={search} onChange={(e) =>  this.handleSearchChange(e)}/>
+            <Search callBack={(search) => this.handleSearchChange(search)}/>
             <h3>Published posts : </h3>
             <ul>{listItems}</ul>
           </div>
