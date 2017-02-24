@@ -2,9 +2,26 @@ import React, { Component } from 'react';
 import { Grid, Navbar, Jumbotron } from 'react-bootstrap';
 import { Link } from 'react-router';
 import RawHtml from "react-raw-html";
+import { Router, Route, browserHistory } from 'react-router';
 import './App.css';
 
-
+class Menu extends React.Component {
+  render() {
+    return (
+      <Navbar inverse fixedTop>
+        <Grid>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Link to="/">Home</Link> &nbsp;
+              <Link to="/about">About</Link>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+        </Grid>
+      </Navbar>
+    );
+  }
+}
 class Search extends React.Component {
   render() {
     return (
@@ -26,7 +43,7 @@ class Post extends React.Component {
   }
 }
 
-class Posts extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
     const posts = [];
@@ -40,7 +57,7 @@ class Posts extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.urlPost) this.loadPost(this.props.urlPost);
+    if(this.props.params && this.props.params.id) this.loadPost(this.props.params.id);
     else this.fetchPostList();
   }
 
@@ -121,6 +138,7 @@ class Posts extends React.Component {
       }
       return (
       <div>
+        <Menu/>
         {postLists}
         {currentPost}
       </div>
@@ -128,28 +146,32 @@ class Posts extends React.Component {
   }
 }
 
-class App extends Component {
+class About extends React.Component {
   render() {
-    let urlPost;
-    if(this.props.params) urlPost = this.props.params.id;
     return (
       <div>
-        <Navbar inverse fixedTop>
-          <Grid>
-            <Navbar.Header>
-              <Navbar.Brand>
-                <a href="/">Home</a>
-              </Navbar.Brand>
-              <Navbar.Toggle />
-            </Navbar.Header>
-          </Grid>
-        </Navbar>
+        <Menu/>
+        <div>Git and Markdown Based Content Management System POC</div>
+      </div>
+    );
+  }
+}
+
+class App extends Component {
+  render() {
+    return (
+      <div>
         <Jumbotron>
           <Grid>
             <h1>GM-CMS</h1>
             <br/>
             <div>
-              <Posts urlPost={urlPost}/>
+            <Router history={browserHistory}>
+              <Route path="/" component={Home}>
+                <Route path="/post/:id" component={Home}/>
+              </Route>
+            <Route path="/about" component={About}/>
+            </Router>
             </div>
             <p>
             </p>
