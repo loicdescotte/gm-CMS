@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Menu from './Menu.js';
 
 class About extends React.Component {
